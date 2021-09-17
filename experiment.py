@@ -22,6 +22,8 @@ def create_parser():
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "output", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
     parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
+    parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
+
     args = parser.parse_args()
     return args
 
@@ -46,7 +48,8 @@ def eval_genomes(genomes, config):
         for c in (task_cycles):
             #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             net = eval('modneat.nn.' + model + '.create(genome,config)')
-            genome.fitness += tasks.binary_task(net, step=100, cycle=c)
+            #genome.fitness += tasks.binary_task(net, step=100, cycle=c)
+            genome.fitness += eval('tasks.' + task_name + '(net, step = 100, cycle=c)')
         genome.fitness /= len(task_cycles)
 
 def run_experiment(config_file):
@@ -85,7 +88,8 @@ def run_experiment(config_file):
     best_fitness_all_cycles = 0.0
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
-        best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
+        #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
@@ -121,6 +125,9 @@ if __name__ == '__main__':
 
     global model
     model = args.model
+
+    global task_name
+    task_name = args.task
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
