@@ -7,7 +7,7 @@ import sys
 import os
 import shutil
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join( os.getcwd(), './neat-python') )
 
 # The NEAT-Python library imports
 import modneat
