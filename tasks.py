@@ -3,7 +3,7 @@ import math
 import matplotlib.pyplot as plt
 from numpy import save
 
-def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> float:
+def eval_fitness(net, step:int, cycle:int, draw_graph=False, show_graph = False, savepath = None) -> float:
 
     error = 0.0
     expected = []
@@ -32,8 +32,8 @@ def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> 
 
     error /= step
 
-    #draw graph
-    if(verbose):
+    if(draw_graph):
+        #draw graph
         x = range(1, step+1)
         y1 = expected
         y2 = got_output
@@ -46,13 +46,15 @@ def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> 
         plt.xlabel("step")
         plt.title("Model's behaviour")
         plt.legend(loc = "upper left")
-        plt.show()
-
+        if(show_graph):
+            plt.show()
 
         #save graph
         if(savepath):
             fig.savefig(savepath)
             print('Graph is saved.')
+
+        plt.close()
 
     assert(error <= 1.0)
 
@@ -64,5 +66,5 @@ class net_dummy:
 
 if __name__=='__main__':
     n = net_dummy()
-    fitness = eval_fitness(n, 100, 20,verbose=True,savepath="./hoge")
+    fitness = eval_fitness(n, 100, 20, show_graph=True,savepath="./hoge")
     print(fitness)

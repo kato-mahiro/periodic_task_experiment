@@ -72,7 +72,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/modneat-checkpoint-'))
 
     # Run for up to 300 generations.
-    best_genome = p.run(eval_genomes, 300)
+    best_genome = p.run(eval_genomes, 30)
 
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
@@ -81,7 +81,7 @@ def run_experiment(config_file):
     print('\nOutput:')
     net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
 
-    best_fitness = eval_fitness(net, step=100, cycle=10, verbose=True)
+    best_fitness = eval_fitness(net, step=100, cycle=10, draw_graph = True, show_graph = False, savepath= out_dir + '/model_behaviour.png')
     print("### best genome's result {}".format(best_fitness))
 
     
