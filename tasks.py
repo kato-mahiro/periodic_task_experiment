@@ -1,6 +1,7 @@
 import random
 import math
 import matplotlib.pyplot as plt
+from numpy import save
 
 def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> float:
 
@@ -40,12 +41,21 @@ def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> 
         y1 = expected
         y2 = got_output
 
+        fig = plt.figure()
+
         plt.plot(x, y1, linestyle = "-", color = "blue", label = "expected output")
         plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
+        plt.grid(linestyle='dotted')
         plt.xlabel("step")
         plt.title("Model's behaviour")
         plt.legend(loc = "upper left")
         plt.show()
+
+
+        #save graph
+        if(savepath):
+            fig.savefig(savepath)
+            print('Graph is saved.')
 
     assert(error <= 1.0)
 
@@ -57,5 +67,5 @@ class net_dummy:
 
 if __name__=='__main__':
     n = net_dummy()
-    fitness = eval_fitness(n, 100, 20,verbose=True)
+    fitness = eval_fitness(n, 100, 20,verbose=True,savepath="./hoge")
     print(fitness)
