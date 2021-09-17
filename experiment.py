@@ -19,13 +19,9 @@ import modneat
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
+    parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "output", required=False)
     args = parser.parse_args()
     return args
-
-# The current working directory
-local_dir = os.path.dirname(__file__)
-# The directory to store outputs
-out_dir = os.path.join(local_dir, 'out')
 
 def eval_genomes(genomes, config):
     """
@@ -74,7 +70,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.StdOutReporter(True))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/modneat-checkpoint-'))
+    p.add_reporter(modneat.Checkpointer(5, filename_prefix = out_dir + '/checkpoint-'))
 
     # Run for up to 300 generations.
     best_genome = p.run(eval_genomes, 30)
@@ -113,14 +109,17 @@ def clean_output():
 
 if __name__ == '__main__':
     args = create_parser()
-    print(args.cycle)
+
     global task_cycles
     task_cycles = args.cycle
+
+    global out_dir
+    out_dir = os.path.join(os.getcwd(), args.savedir)
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(local_dir, './config/exgenome_config.ini')
+    config_path = os.path.join(os.getcwd(), './config/exgenome_config.ini')
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
