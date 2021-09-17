@@ -94,7 +94,7 @@ def run_experiment(config_file):
         print("\n\nFAILURE: Failed to find XOR problem solver!!!")
 
     # Visualize the experiment results
-    node_names = {-1:'A', -2: 'B', 0:'A XOR B'}
+    node_names = {-1:'get_output_phase_flag', -2: 'feedback_phase_flag', -3:'previous_output_value', -4:'difference_value', 0:'output'}
     visualize.draw_net(config, best_genome, True, node_names=node_names, directory=out_dir)
     visualize.plot_stats(stats, ylog=False, view=True, filename=os.path.join(out_dir, 'avg_fitness.svg'))
     visualize.plot_species(stats, view=True, filename=os.path.join(out_dir, 'speciation.svg'))
