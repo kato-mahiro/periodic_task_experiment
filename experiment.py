@@ -21,6 +21,7 @@ def create_parser():
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "output", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
+    parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
     args = parser.parse_args()
     return args
 
@@ -43,7 +44,8 @@ def eval_genomes(genomes, config):
     for genome_id, genome in genomes:
         genome.fitness = 0.0
         for c in (task_cycles):
-            net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
+            #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
+            net = eval('modneat.nn.' + model + '.create(genome,config)')
             genome.fitness += tasks.binary_task(net, step=100, cycle=c)
         genome.fitness /= len(task_cycles)
 
@@ -82,7 +84,7 @@ def run_experiment(config_file):
     # Show behaviour of the most fit genome against training data.
     best_fitness_all_cycles = 0.0
     for c in task_cycles:
-        net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
+        net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
@@ -116,6 +118,9 @@ if __name__ == '__main__':
 
     global out_dir
     out_dir = os.path.join(os.getcwd(), args.savedir)
+
+    global model
+    model = args.model
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
