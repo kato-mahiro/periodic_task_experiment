@@ -1,7 +1,7 @@
 #
 # This file provides source code to conduct experiment 
 # args 
-# -
+# - cycle 
 # - 
 #
 
@@ -9,7 +9,7 @@
 import sys
 import os
 import shutil
-
+import argparse
 sys.path.append(os.path.join( os.getcwd(), './neat-python') )
 
 # The NEAT-Python library imports
@@ -19,6 +19,13 @@ import modneat
 import visualize
 
 from tasks import *
+
+def create_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--arg1')
+    args = parser.parse_args()
+    return args
+
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
@@ -109,6 +116,8 @@ def clean_output():
 
 
 if __name__ == '__main__':
+    args = create_parser()
+    print(args.arg1)
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
