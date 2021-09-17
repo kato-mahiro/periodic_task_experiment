@@ -1,7 +1,8 @@
+import random
 import math
 import matplotlib.pyplot as plt
 
-def eval_fitness(net, step:int, cycle:int, verbose = False) -> float:
+def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> float:
 
     error = 0.0
     expected = []
@@ -39,8 +40,11 @@ def eval_fitness(net, step:int, cycle:int, verbose = False) -> float:
         y1 = expected
         y2 = got_output
 
-        plt.plot(x, y1)
-        plt.plot(x, y2)
+        plt.plot(x, y1, linestyle = "-", color = "blue", label = "expected output")
+        plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
+        plt.xlabel("step")
+        plt.title("Model's behaviour")
+        plt.legend(loc = "upper left")
         plt.show()
 
     assert(error <= 1.0)
@@ -49,9 +53,9 @@ def eval_fitness(net, step:int, cycle:int, verbose = False) -> float:
 
 class net_dummy:
     def activate(self, input):
-        return [0.5]
+        return [random.random()]
 
 if __name__=='__main__':
     n = net_dummy()
-    fitness = eval_fitness(n, 100, 10,verbose=True)
+    fitness = eval_fitness(n, 100, 20,verbose=True)
     print(fitness)
