@@ -1,5 +1,8 @@
 #
-# This file provides source code of XOR experiment using on NEAT-Python library
+# This file provides source code to conduct experiment 
+# args 
+# -
+# - 
 #
 
 # The Python standard library import
@@ -11,36 +14,17 @@ sys.path.append(os.path.join( os.getcwd(), './neat-python') )
 
 # The NEAT-Python library imports
 import modneat
+
 # The helper used to visualize experiment results
 import visualize
 
+from tasks import *
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
 # The directory to store outputs
 out_dir = os.path.join(local_dir, 'out')
 
-# The XOR inputs and expected corresponding outputs for fitness evaluation
-xor_inputs  = [(1.0, 1.0), (1.0, 1.0), (1.0, 1.0), (1.0, 1.0)]
-xor_outputs = [   (1.0,),     (0.0,),     (1.0,),     (0.0,)]
-
-def eval_fitness(net):
-    """
-    Evaluates fitness of the genome that was used to generate 
-    provided net
-    Arguments:
-        net: The feed-forward neural network generated from genome
-    Returns:
-        The fitness score - the higher score the means the better 
-        fit organism. Maximal score: 16.0
-    """
-    error_sum = 0.0
-    for xi, xo in zip(xor_inputs, xor_outputs):
-        output = net.activate(xi)
-        error_sum += abs(output[0] - xo[0])
-    # Calculate amplified fitness
-    fitness = (4 - error_sum) ** 2
-    return fitness
 
 def eval_genomes(genomes, config):
     """
@@ -61,7 +45,7 @@ def eval_genomes(genomes, config):
     for genome_id, genome in genomes:
         genome.fitness = 4.0
         net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
-        genome.fitness = eval_fitness(net)
+        genome.fitness = eval_fitness(net, step=100, cycle=10)
 
 def run_experiment(config_file):
     """
@@ -88,7 +72,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/modneat-checkpoint-'))
 
     # Run for up to 300 generations.
-    best_genome = p.run(eval_genomes, 30)
+    best_genome = p.run(eval_genomes, 300)
 
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
@@ -96,12 +80,14 @@ def run_experiment(config_file):
     # Show output of the most fit genome against training data.
     print('\nOutput:')
     net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
-    for xi, xo in zip(xor_inputs, xor_outputs):
-        output = net.activate(xi)
-        print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
+
+    best_fitness = eval_fitness(net, step=100, cycle=10, verbose=True)
+    print("### best genome's result {}".format(best_fitness))
+
+    
 
     # Check if the best genome is an adequate XOR solver
-    best_genome_fitness = eval_fitness(net)
+    best_genome_fitness = eval_fitness(net, step=100, cycle=10)
     if best_genome_fitness > config.fitness_threshold:
         print("\n\nSUCCESS: The XOR problem solver found!!!")
     else:
@@ -109,9 +95,9 @@ def run_experiment(config_file):
 
     # Visualize the experiment results
     node_names = {-1:'A', -2: 'B', 0:'A XOR B'}
-    visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
-    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.svg'))
-    visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.svg'))
+    visualize.draw_net(config, best_genome, True, node_names=node_names, directory=out_dir)
+    visualize.plot_stats(stats, ylog=False, view=True, filename=os.path.join(out_dir, 'avg_fitness.svg'))
+    visualize.plot_species(stats, view=True, filename=os.path.join(out_dir, 'speciation.svg'))
 
 def clean_output():
     if os.path.isdir(out_dir):
