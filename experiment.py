@@ -20,6 +20,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "output", required=False)
+    parser.add_argument('--config', type=str, help="name of config file.", required = True)
     args = parser.parse_args()
     return args
 
@@ -119,7 +120,7 @@ if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(os.getcwd(), './config/exgenome_config.ini')
+    config_path = os.path.join(os.getcwd(), args.config)
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
