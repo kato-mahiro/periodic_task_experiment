@@ -1,6 +1,6 @@
 import math
 
-def eval_fitness(net, step:int, cycle:int) -> float:
+def eval_fitness(net, step:int, cycle:int, verbose = False) -> float:
 
     error = 0.0
 
@@ -10,15 +10,18 @@ def eval_fitness(net, step:int, cycle:int) -> float:
         target_output = (math.sin(cyclic_input) + 1.0 ) / 2
 
         # Get output phase
-        net_input = [ (1.0, 0.0, 0.0, 0.0)]
-        output = net.activate(net_input)
+        net_input = [1.0, 0.0, 0.0, 0.0]
+        output = net.activate(net_input)[0]
         difference = target_output - output
+
+        if(verbose):
+            print('expected output: {} got output: {}'.format(target_output, output))
 
         # Caliculate error
         error += math.log ( abs (target_output - output) +1 ) 
 
         # Feedback phase
-        net_input = [ (0.0, 1.0, output, difference) ]
+        net_input = [0.0, 1.0, output, difference]
         net.activate(net_input)
 
     error /= step
