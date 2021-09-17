@@ -49,12 +49,16 @@ def eval_genomes(genomes, config):
         config: The configuration settings with algorithm
                 hyper-parameters
     """
+    print(task_cycles)
     for genome_id, genome in genomes:
-        genome.fitness = 4.0
-        net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
-        genome.fitness = eval_fitness(net, step=100, cycle=10)
+        genome.fitness = 0.0
+        for c in (task_cycles):
+            net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
+            genome.fitness = eval_fitness(net, step=100, cycle=c)
+        #genome.fitness /= len(task_cycles)
+        print(genome.fitness)
 
-def run_experiment(config_file):
+def run_experiment(config_file, cycle):
     """
     The function to run XOR experiment against hyper-parameters 
     defined in the provided configuration file.
@@ -86,9 +90,10 @@ def run_experiment(config_file):
 
     # Show output of the most fit genome against training data.
     print('\nOutput:')
-    net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
+    for c in task_cycles:
+        net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
 
-    best_fitness = eval_fitness(net, step=100, cycle=10, draw_graph = True, show_graph = False, savepath= out_dir + '/model_behaviour.png')
+        best_fitness = eval_fitness(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/model_behaviour.png')
     print("### best genome's result {}".format(best_fitness))
 
     
@@ -118,6 +123,9 @@ def clean_output():
 if __name__ == '__main__':
     args = create_parser()
     print(args.cycle)
+    global task_cycles
+    task_cycles = args.cycle
+
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
@@ -127,4 +135,4 @@ if __name__ == '__main__':
     clean_output()
 
     # Run the experiment
-    run_experiment(config_path)
+    run_experiment(config_path, args.cycle)
