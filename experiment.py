@@ -18,7 +18,7 @@ import modneat
 # The helper used to visualize experiment results
 import visualize
 
-from tasks import *
+import tasks
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -54,9 +54,9 @@ def eval_genomes(genomes, config):
         genome.fitness = 0.0
         for c in (task_cycles):
             net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
-            genome.fitness = eval_fitness(net, step=100, cycle=c)
-        #genome.fitness /= len(task_cycles)
-        print(genome.fitness)
+            genome.fitness += tasks.binary_task(net, step=100, cycle=c)
+        genome.fitness /= len(task_cycles)
+        #print(genome.fitness)
 
 def run_experiment(config_file, cycle):
     """
@@ -89,21 +89,14 @@ def run_experiment(config_file, cycle):
     print('\nBest genome:\n{!s}'.format(best_genome))
 
     # Show output of the most fit genome against training data.
-    print('\nOutput:')
+    print('\nGraph of each cycle:')
+    best_fitness_all_cycles = 0.0
     for c in task_cycles:
         net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
-
-        best_fitness = eval_fitness(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/model_behaviour.png')
-    print("### best genome's result {}".format(best_fitness))
-
-    
-
-    # Check if the best genome is an adequate XOR solver
-    best_genome_fitness = eval_fitness(net, step=100, cycle=10)
-    if best_genome_fitness > config.fitness_threshold:
-        print("\n\nSUCCESS: The XOR problem solver found!!!")
-    else:
-        print("\n\nFAILURE: Failed to find XOR problem solver!!!")
+        best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
+        best_fitness_all_cycles += best_fitness
+        print('fitness of cycle {} : {}'.format(c, best_fitness))
+    print('best fitness of all cycles average: {}'.format(best_fitness_all_cycles / len(task_cycles)))
 
     # Visualize the experiment results
     node_names = {-1:'get_output_phase_flag', -2: 'feedback_phase_flag', -3:'previous_output_value', -4:'difference_value', 0:'output'}
