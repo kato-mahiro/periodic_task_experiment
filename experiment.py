@@ -1,8 +1,5 @@
 #
 # This file provides source code to conduct experiment 
-# args 
-# - cycle 
-# - 
 #
 
 # The Python standard library import
@@ -10,15 +7,14 @@ import sys
 import os
 import shutil
 import argparse
-sys.path.append(os.path.join( os.getcwd(), './neat-python') )
-
-# The NEAT-Python library imports
-import modneat
 
 # The helper used to visualize experiment results
 import visualize
-
+# The definition file of tasks
 import tasks
+# The NEAT-Python library imports
+sys.path.append(os.path.join( os.getcwd(), './neat-python') )
+import modneat
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -26,12 +22,10 @@ def create_parser():
     args = parser.parse_args()
     return args
 
-
 # The current working directory
 local_dir = os.path.dirname(__file__)
 # The directory to store outputs
 out_dir = os.path.join(local_dir, 'out')
-
 
 def eval_genomes(genomes, config):
     """
@@ -49,16 +43,14 @@ def eval_genomes(genomes, config):
         config: The configuration settings with algorithm
                 hyper-parameters
     """
-    print(task_cycles)
     for genome_id, genome in genomes:
         genome.fitness = 0.0
         for c in (task_cycles):
             net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             genome.fitness += tasks.binary_task(net, step=100, cycle=c)
         genome.fitness /= len(task_cycles)
-        #print(genome.fitness)
 
-def run_experiment(config_file, cycle):
+def run_experiment(config_file):
     """
     The function to run XOR experiment against hyper-parameters 
     defined in the provided configuration file.
@@ -69,9 +61,11 @@ def run_experiment(config_file, cycle):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.ExGenome, modneat.DefaultReproduction,
-                         modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
-                         config_file)
+    config = modneat.Config(modneat.ExGenome,
+                            modneat.DefaultReproduction,
+                            modneat.DefaultSpeciesSet,
+                            modneat.DefaultStagnation,
+                            config_file)
 
     # Create the population, which is the top-level object for a NEAT run.
     p = modneat.Population(config)
@@ -88,18 +82,23 @@ def run_experiment(config_file, cycle):
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
 
-    # Show output of the most fit genome against training data.
-    print('\nGraph of each cycle:')
+    # Show behaviour of the most fit genome against training data.
     best_fitness_all_cycles = 0.0
     for c in task_cycles:
         net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
         best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness_all_cycles += best_fitness
         print('fitness of cycle {} : {}'.format(c, best_fitness))
+
+        best_fitness_all_cycles += best_fitness
     print('best fitness of all cycles average: {}'.format(best_fitness_all_cycles / len(task_cycles)))
 
     # Visualize the experiment results
-    node_names = {-1:'get_output_phase_flag', -2: 'feedback_phase_flag', -3:'previous_output_value', -4:'difference_value', 0:'output'}
+    node_names = {-1:'get_output_phase_flag', 
+                  -2: 'feedback_phase_flag', 
+                  -3:'previous_output_value', 
+                  -4:'difference_value', 
+                  0:'output'}
+
     visualize.draw_net(config, best_genome, True, node_names=node_names, directory=out_dir)
     visualize.plot_stats(stats, ylog=False, view=True, filename=os.path.join(out_dir, 'avg_fitness.svg'))
     visualize.plot_species(stats, view=True, filename=os.path.join(out_dir, 'speciation.svg'))
@@ -111,7 +110,6 @@ def clean_output():
 
     # create the output directory
     os.makedirs(out_dir, exist_ok=False)
-
 
 if __name__ == '__main__':
     args = create_parser()
@@ -128,4 +126,4 @@ if __name__ == '__main__':
     clean_output()
 
     # Run the experiment
-    run_experiment(config_path, args.cycle)
+    run_experiment(config_path)
