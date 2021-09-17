@@ -23,9 +23,6 @@ def eval_fitness(net, step:int, cycle:int, verbose = False, savepath = None) -> 
         got_output.append(output)
         difference = target_output - output
 
-        if(verbose):
-            print('expected output: {} got output: {}'.format(target_output, output))
-
         # Caliculate error
         error += math.log ( abs (target_output - output) +1 ) 
 
