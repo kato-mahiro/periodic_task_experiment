@@ -18,7 +18,7 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, 0.0, 0.0]
+        net_input = [1.0, 0.0, 0.0, 0.0, s / step, cycle / 100]
         output = net.activate(net_input)[0]
         got_output.append(output)
         difference = target_output - output
@@ -27,7 +27,7 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
         error += math.log ( abs (target_output - output) +1 ) 
 
         # Feedback phase
-        net_input = [0.0, 1.0, output, difference]
+        net_input = [0.0, 1.0, output, difference, s / step, cycle / 100]
         net.activate(net_input)
 
     error /= step
@@ -61,7 +61,7 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, 0.0, 0.0]
+        net_input = [1.0, 0.0, 0.0, 0.0, s / step, cycle / 100]
         output = net.activate(net_input)[0]
         got_output.append(output)
         difference = target_output - output
@@ -70,7 +70,7 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
         error += math.log ( abs (target_output - output) +1 ) 
 
         # Feedback phase
-        net_input = [0.0, 1.0, output, difference]
+        net_input = [0.0, 1.0, output, difference , s / step, cycle / 100]
         net.activate(net_input)
 
     error /= step
