@@ -23,6 +23,7 @@ def create_parser():
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
     parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
     parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
+    parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
 
     args = parser.parse_args()
     return args
@@ -63,7 +64,13 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.ExGenome,
+    if(model == 'ExFeedForwardNetwork'):
+        model_genome = modneat.ExGenome
+    elif(model == 'ModFeedForwardNetwork'):
+        model_genome = modneat.ModGenome
+    elif(model == 'ExModFeedForwardNetwork'):
+        model_genome = modneat.ExModGenome
+    config = modneat.Config(model_genome,
                             modneat.DefaultReproduction,
                             modneat.DefaultSpeciesSet,
                             modneat.DefaultStagnation,
@@ -78,8 +85,8 @@ def run_experiment(config_file):
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(5, filename_prefix = out_dir + '/checkpoint-'))
 
-    # Run for up to 300 generations.
-    best_genome = p.run(eval_genomes, 30)
+    # Run for up to generations.
+    best_genome = p.run(eval_genomes, generation)
 
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
@@ -89,7 +96,7 @@ def run_experiment(config_file):
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness = eval( 'tasks.' + task_name + "(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=100, cycle=c, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
@@ -102,9 +109,9 @@ def run_experiment(config_file):
                   -4:'difference_value', 
                   0:'output'}
 
-    visualize.draw_net(config, best_genome, True, node_names=node_names, directory=out_dir)
-    visualize.plot_stats(stats, ylog=False, view=True, filename=os.path.join(out_dir, 'avg_fitness.svg'))
-    visualize.plot_species(stats, view=True, filename=os.path.join(out_dir, 'speciation.svg'))
+    visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+    visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
 
 def clean_output():
     if os.path.isdir(out_dir):
@@ -128,6 +135,10 @@ if __name__ == '__main__':
 
     global task_name
     task_name = args.task
+
+    global generation
+    generation = args.generation
+
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
