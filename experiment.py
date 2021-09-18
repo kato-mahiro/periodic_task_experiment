@@ -84,7 +84,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.StdOutReporter(True))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(modneat.Checkpointer(5, filename_prefix = out_dir + '/checkpoint-'))
+    p.add_reporter(modneat.Checkpointer(5, filename_prefix = out_dir + '/checkpoints/checkpoint-'))
 
     # Run for up to generations.
     best_genome = p.run(eval_genomes, generation)
@@ -121,6 +121,7 @@ def clean_output():
 
     # create the output directory
     os.makedirs(out_dir, exist_ok=False)
+    os.makedirs(out_dir + '/checkpoints/', exist_ok=False)
 
 if __name__ == '__main__':
     args = create_parser()
