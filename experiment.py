@@ -19,11 +19,12 @@ import modneat
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
-    parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "output", required=False)
+    parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "outputs", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
     parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
     parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
     parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
+    parser.add_argument('--run_id', type=str, help="ID of the experiment.", default = '0', required = False)
 
     args = parser.parse_args()
     return args
@@ -128,7 +129,8 @@ if __name__ == '__main__':
     task_cycles = args.cycle
 
     global out_dir
-    out_dir = os.path.join(os.getcwd(), args.savedir)
+    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_run_' +args.run_id)
+    print('out_dir is {}'.format(out_dir))
 
     global model
     model = args.model
@@ -138,7 +140,6 @@ if __name__ == '__main__':
 
     global generation
     generation = args.generation
-
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
