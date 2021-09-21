@@ -24,7 +24,10 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
         difference = target_output - output
 
         # Caliculate error
-        error += math.log ( abs (target_output - output) +1 ) 
+        if( s < step/2):
+            error += 0
+        elif( s >= step/2):
+            error += math.log ( abs (target_output - output) +1 )  * 2
 
         # Feedback phase
         net_input = [0.0, 1.0, output, difference]
@@ -67,7 +70,10 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
         difference = target_output - output
 
         # Caliculate error
-        error += math.log ( abs (target_output - output) +1 ) 
+        if( s < step / 2):
+            error += 0
+        elif( s >= step /2):
+            error += math.log ( abs (target_output - output) +1 )  * 2
 
         # Feedback phase
         net_input = [0.0, 1.0, output, difference]
