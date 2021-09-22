@@ -18,7 +18,7 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, 0.0, 0.0, s / step, cycle / 100]
+        net_input = [1.0, 0.0, 0.0, 0.0]
         output = net.activate(net_input)[0]
         got_output.append(output)
         difference = target_output - output
@@ -27,7 +27,7 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
         error += math.log ( abs (target_output - output) +1 ) 
 
         # Feedback phase
-        net_input = [0.0, 1.0, output, difference, s / step, cycle / 100]
+        net_input = [0.0, 1.0, output, difference]
         net.activate(net_input)
 
     error /= step
@@ -43,6 +43,8 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
 def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, savepath = None) -> float:
 
     error = 0.0
+    bh_error = 0.0
+    ah_error = 0.0
     expected = []
     got_output = []
 
@@ -61,19 +63,28 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, 0.0, 0.0, s / step, cycle / 100]
+        net_input = [1.0, 0.0, 0.0, 0.0]
         output = net.activate(net_input)[0]
         got_output.append(output)
         difference = target_output - output
 
         # Caliculate error
-        error += math.log ( abs (target_output - output) +1 ) 
+        if( s < step // 2):
+            bh_error += math.log ( abs (target_output - output) +1 ) 
+            ah_error += 0
+            error += 0
+        else:
+            bh_error += 0
+            ah_error += math.log ( abs (target_output - output) +1 ) 
+            error +=  math.log ( abs (target_output - output) +1 ) * 2 
 
         # Feedback phase
-        net_input = [0.0, 1.0, output, difference , s / step, cycle / 100]
+        net_input = [0.0, 1.0, output, difference]
         net.activate(net_input)
 
     error /= step
+    ah_error /= step
+    bh_error /= step
 
     if(draw_graph):
         draw(step = step, expected = expected, got_output = got_output, show_graph = show_graph, savepath = savepath)
@@ -81,7 +92,7 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
 
     assert(error <= 1.0)
 
-    return 1.0 - error
+    return 1.0 - error, (1.0 - ah_error) / (1.0 - bh_error)
 
 def draw(step, expected, got_output, show_graph, savepath):
     x = range(1, step+1)
