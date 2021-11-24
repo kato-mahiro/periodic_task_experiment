@@ -108,8 +108,6 @@ def run_experiment(config_file):
                   -2:'feedback_phase_flag', 
                   -3:'previous_output_value', 
                   -4:'difference_value', 
-                  -5:'step_no_input',
-                  -6:'cycle_input',
                   0:'output'}
 
     visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
