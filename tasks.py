@@ -51,6 +51,7 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
     step_cnt = 0
     target_output = 0.0
     
+    same_rule_cnt = 0
     for s in range (step):
 
         step_cnt += 1
@@ -64,11 +65,14 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
                     target_output = 0.0
             
         else:
-            if(random.random() <= 0.15):
+            if(random.random() <= 0.1 or same_rule_cnt > 10):
+                same_rule_cnt = 0
                 if(target_output == 0.0):
                     target_output = 1.0
                 elif(target_output == 1.0):
                     target_output = 0.0
+            else:
+                same_rule_cnt += 1
 
 
         expected.append(target_output)
@@ -99,11 +103,9 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
 
     if(draw_graph):
         draw(step = step, expected = expected, got_output = got_output, show_graph = show_graph, savepath = savepath)
-
-
     assert(error <= 1.0)
 
-    return 1.0 - error, (1.0 - ah_error) / (1.0 - bh_error)
+    return 1.0 - error
 
 def draw(step, expected, got_output, show_graph, savepath):
     x = range(1, step+1)
@@ -113,7 +115,7 @@ def draw(step, expected, got_output, show_graph, savepath):
     fig = plt.figure()
 
     plt.plot(x, y1, linestyle = "-", color = "blue", label = "expected output")
-    plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
+    #plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
     plt.grid(linestyle='dotted')
     plt.xlabel("step")
     plt.title("Model's behaviour")
