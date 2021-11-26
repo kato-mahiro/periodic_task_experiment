@@ -51,7 +51,7 @@ def eval_genomes(genomes, config):
             #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             net = eval('modneat.nn.' + model + '.create(genome,config)')
             #genome.fitness += tasks.binary_task(net, step=100, cycle=c)
-            genome.fitness += eval('tasks.' + task_name + '(net, step = 100, cycle=c)')
+            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c)')
         genome.fitness /= len(task_cycles)
 
 def run_experiment(config_file):
@@ -97,7 +97,7 @@ def run_experiment(config_file):
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness = eval( 'tasks.' + task_name + "(net, step=100, cycle=c, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
