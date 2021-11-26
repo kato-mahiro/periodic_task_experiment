@@ -71,7 +71,7 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
             if(same_rule_cnt == random_cycle):
                 same_rule_cnt = 0
                 random_cycle = random.randint(10, 20)
-                print(random_cycle)
+                #print(random_cycle)
                 if(target_output == 0.0):
                     target_output = 1.0
                 elif(target_output == 1.0):
@@ -120,7 +120,7 @@ def draw(step, expected, got_output, show_graph, savepath):
     fig = plt.figure()
 
     plt.plot(x, y1, linestyle = "-", color = "blue", label = "expected output")
-    #plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
+    plt.plot(x, y2, linestyle = "dashed", color = "red", label = "model's output")
     plt.grid(linestyle='dotted')
     plt.xlabel("step")
     plt.title("Model's behaviour")
