@@ -51,12 +51,14 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
     step_cnt = 0
     target_output = 0.0
     
+    # for random switching
     same_rule_cnt = 0
+    random_cycle = random.randint(10, 20)
+
     for s in range (step):
 
         step_cnt += 1
 
-        #if cycle is 0, switch at random timing.
         if cycle != 0:
             if(step_cnt % cycle == 0):
                 if(target_output == 0.0):
@@ -64,9 +66,12 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
                 elif(target_output == 1.0):
                     target_output = 0.0
             
+        # if cycle is 0, switch at random timing.
         else:
-            if(random.random() <= 0.1 or same_rule_cnt > 10):
+            if(same_rule_cnt == random_cycle):
                 same_rule_cnt = 0
+                random_cycle = random.randint(10, 20)
+                print(random_cycle)
                 if(target_output == 0.0):
                     target_output = 1.0
                 elif(target_output == 1.0):
@@ -137,7 +142,7 @@ class net_dummy:
 if __name__=='__main__':
     n = net_dummy()
 
-    fitness = binary_task(n, 100, 0, draw_graph=True, show_graph=True,savepath="./hoge")
+    fitness = binary_task(n, 150, 0, draw_graph=True, show_graph=True,savepath="./hoge")
     print(fitness)
 
     #fitness = sinwave_task(n, 100, 20, draw_graph=True, show_graph=True,savepath="./hoge")
