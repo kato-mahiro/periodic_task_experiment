@@ -7,6 +7,8 @@ savedir=$(date | tr ' ' '-')
 mkdir ./$savedir
 echo "実験するんだわ～ $savedir" | ./rocket
 
+cp ./experiment_scripts/run_all.sh $savedir
+
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
     --task binary_task \
@@ -15,7 +17,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/random_cycle_task > /dev/null &&
-    echo "task1-1 終了" | ./rocket
+    echo "task1-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
@@ -25,7 +27,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/random_cycle_task > /dev/null &&
-    echo "task1-2 終了" | ./rocket
+    echo "task1-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
@@ -35,7 +37,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/random_cycle_task > /dev/null &&
-    echo "task1-3 終了" | ./rocket
+    echo "task1-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 11 12 13 14 15 16 17 18 19 20 \
@@ -45,7 +47,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/10-20_cycle_task > /dev/null &&
-    echo "task2-1 終了" | ./rocket
+    echo "task2-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 11 12 13 14 15 16 17 18 19 20 \
@@ -55,7 +57,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/10-20_cycle_task > /dev/null &&
-    echo "task2-2 終了" | ./rocket
+    echo "task2-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 11 12 13 14 15 16 17 18 19 20\
@@ -65,17 +67,17 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/10-20_cycle_task > /dev/null &&
-    echo "task2-3 終了" | ./rocket
+    echo "task2-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 15 \ 
+    --cycle 15 \
     --task binary_task \
     --model ExFeedForwardNetwork \
     --config ./config/exgenome_config.ini \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/15_cycle_task > /dev/null &&
-    echo "task3-1 終了" | ./rocket
+    echo "task3-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 15 \
@@ -85,7 +87,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/15_cycle_task > /dev/null &&
-    echo "task3-2 終了" | ./rocket
+    echo "task3-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 15 \
@@ -95,4 +97,4 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 1000 \
     --savedir $savedir/15_cycle_task > /dev/null &&
-    echo "task3-3 終了" | ./rocket
+    echo "task3-3 終了" | ./rocket &
