@@ -95,10 +95,10 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
             if( s < step // 2):
                 error += 0
             else:
-                error +=  math.log ( abs (target_output - output) +1 ) * 2 
+                error += abs(target_output - output) * 2
 
         else:
-            error +=  math.log ( abs (target_output - output) +1 )
+            error += abs(target_output - output)
 
         # Feedback phase
         net_input = [0.0, 1.0, output, difference]
