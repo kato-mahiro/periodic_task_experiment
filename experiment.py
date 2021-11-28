@@ -19,6 +19,7 @@ import modneat
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
+    parser.add_argument('--is_increase', type=bool, help="rule of dynamics. if True, cycle is increased. ", default = False, required = False)
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "outputs", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
     parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
@@ -51,7 +52,7 @@ def eval_genomes(genomes, config):
             #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             net = eval('modneat.nn.' + model + '.create(genome,config)')
             #genome.fitness += tasks.binary_task(net, step=100, cycle=c)
-            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c)')
+            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c, is_increase=is_increase)')
         genome.fitness /= len(task_cycles)
 
 def run_experiment(config_file):
@@ -97,7 +98,7 @@ def run_experiment(config_file):
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, is_increase=is_increase, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
@@ -128,6 +129,9 @@ if __name__ == '__main__':
 
     global task_cycles
     task_cycles = args.cycle
+
+    global is_increase
+    is_increase = args.is_increase
 
     global out_dir
     out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_run_' +args.run_id)
