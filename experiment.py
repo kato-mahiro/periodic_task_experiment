@@ -19,14 +19,14 @@ import modneat
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cycle', nargs="+", type=int, help="list of cycle no of experiment.", required=True)
-    parser.add_argument('--is_increase', type=bool, help="rule of dynamics. if True, cycle is increased. ", default = False, required = False)
+    parser.add_argument('--is_increase', type=str, help="rule of dynamics. if True, cycle is increased. ", default = "False", required = False)
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "outputs", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
     parser.add_argument('--model', type=str, help="name of using model. ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
     parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
     parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
     parser.add_argument('--run_id', type=str, help="ID of the experiment.", default = '0', required = False)
-    parser.add_argument('--is_bh_only', type=bool, help="use only before half for fitness or, not", required = True)
+    parser.add_argument('--is_bh_only', type=str, help="use only before half for fitness or, not", required = True)
 
     args = parser.parse_args()
     return args
@@ -126,17 +126,17 @@ def clean_output():
     os.makedirs(out_dir + '/checkpoints/', exist_ok=False)
 
 if __name__ == '__main__':
+
     args = create_parser()
 
     global task_cycles
     task_cycles = args.cycle
 
     global is_increase
-    is_increase = args.is_increase
-
-    global out_dir
-    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_run_' +args.run_id)
-    print('out_dir is {}'.format(out_dir))
+    if(args.is_increase == 'True'):
+        is_increase = True
+    elif(args.is_increase == 'False'):
+        is_increase = False
 
     global model
     model = args.model
@@ -148,7 +148,16 @@ if __name__ == '__main__':
     generation = args.generation
 
     global is_bh_only
-    is_bh_only = args.is_bh_only
+    if(args.is_bh_only == 'True'):
+        is_bh_only = True
+    elif(args.is_bh_only == 'False'):
+        is_bh_only = False
+        
+
+    global out_dir
+    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_isIncrease_' + str(args.is_increase) + '_isBhOnly_' + str(args.is_bh_only) +   '_run_' +args.run_id)
+    print('out_dir is {}'.format(out_dir))
+
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
