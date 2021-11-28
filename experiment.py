@@ -26,6 +26,7 @@ def create_parser():
     parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
     parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
     parser.add_argument('--run_id', type=str, help="ID of the experiment.", default = '0', required = False)
+    parser.add_argument('--is_bh_only', type=bool, help="use only before half for fitness or, not", required = True)
 
     args = parser.parse_args()
     return args
@@ -52,7 +53,7 @@ def eval_genomes(genomes, config):
             #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             net = eval('modneat.nn.' + model + '.create(genome,config)')
             #genome.fitness += tasks.binary_task(net, step=100, cycle=c)
-            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c, is_increase=is_increase)')
+            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c, is_increase=is_increase, is_only_bh = is_only_bh)')
         genome.fitness /= len(task_cycles)
 
 def run_experiment(config_file):
@@ -98,7 +99,7 @@ def run_experiment(config_file):
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, is_increase=is_increase, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, is_increase=is_increase, is_only_bh = is_only_bh, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
@@ -145,6 +146,9 @@ if __name__ == '__main__':
 
     global generation
     generation = args.generation
+
+    global is_bh_only
+    is_bh_only = args.is_bh_only
 
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
