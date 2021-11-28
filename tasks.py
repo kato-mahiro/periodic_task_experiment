@@ -40,7 +40,7 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
 
     return 1.0 - error
 
-def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, savepath = None) -> float:
+def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, show_graph = False, savepath = None) -> float:
 
     error = 0.0
     bh_error = 0.0
@@ -65,6 +65,10 @@ def binary_task(net, step:int, cycle:int, draw_graph=False, show_graph = False, 
                     target_output = 1.0
                 elif(target_output == 1.0):
                     target_output = 0.0
+                if(is_increase):
+                    cycle += 1
+                step_cnt = 1
+            
             
         # if cycle is 0, switch at random timing.
         else:
@@ -142,7 +146,7 @@ class net_dummy:
 if __name__=='__main__':
     n = net_dummy()
 
-    fitness = binary_task(n, 150, 0, draw_graph=True, show_graph=True,savepath="./hoge")
+    fitness = binary_task(n, 150, 10, is_increase=False, draw_graph=True, show_graph=True,savepath="./hoge")
     print(fitness)
 
     #fitness = sinwave_task(n, 100, 20, draw_graph=True, show_graph=True,savepath="./hoge")
