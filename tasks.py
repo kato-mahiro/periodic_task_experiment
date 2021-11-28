@@ -40,11 +40,9 @@ def sinwave_task(net, step:int, cycle:int, draw_graph=False, show_graph = False,
 
     return 1.0 - error
 
-def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, show_graph = False, savepath = None, only_bh = True) -> float:
+def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, show_graph = False, savepath = None, is_only_bh = True) -> float:
 
     error = 0.0
-    bh_error = 0.0
-    ah_error = 0.0
     expected = []
     got_output = []
 
@@ -93,14 +91,10 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
         difference = target_output - output
 
         # Caliculate error
-        if(only_bh):
+        if(is_only_bh):
             if( s < step // 2):
-                bh_error += math.log ( abs (target_output - output) +1 ) 
-                ah_error += 0
                 error += 0
             else:
-                bh_error += 0
-                ah_error += math.log ( abs (target_output - output) +1 ) 
                 error +=  math.log ( abs (target_output - output) +1 ) * 2 
 
         else:
@@ -111,8 +105,6 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
         net.activate(net_input)
 
     error /= step
-    ah_error /= step
-    bh_error /= step
 
     if(draw_graph):
         draw(step = step, expected = expected, got_output = got_output, show_graph = show_graph, savepath = savepath)
