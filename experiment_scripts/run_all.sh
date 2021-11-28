@@ -12,7 +12,7 @@ cp ./experiment_scripts/run_all.sh $savedir
 #
 # ランダムルール変更タスクの実験
 #
-seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
     --task binary_task \
     --model ExFeedForwardNetwork \
@@ -89,7 +89,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -100,7 +100,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -111,7 +111,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -122,7 +122,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-4 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -133,7 +133,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-5 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -144,7 +144,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/static > /dev/null &&
     echo "fixed-6 終了" | ./rocket &
 
 
@@ -159,7 +159,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -170,7 +170,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -181,7 +181,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -192,7 +192,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-4 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -203,7 +203,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-5 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -214,7 +214,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-6 終了" | ./rocket &
 
 #
@@ -229,7 +229,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -241,7 +241,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -253,7 +253,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -265,7 +265,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-4 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -277,7 +277,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-5 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
@@ -289,5 +289,5 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
-    --savedir $savedir/random > /dev/null &&
+    --savedir $savedir/increasing > /dev/null &&
     echo "increasing-6 終了" | ./rocket &
