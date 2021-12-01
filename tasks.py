@@ -11,6 +11,7 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
 
     step_cnt = 0
     target_output = 0.0
+    previous_output = 0.0
     
     # for random switching
     same_rule_cnt = 0
@@ -48,24 +49,24 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, 0.0, 0.0]
-        output = net.activate(net_input)[0]
-        got_output.append(output)
-        difference = target_output - output
+        net_input = [1.0, 0.0, previous_output, 0.0]
+        previous_output = net.activate(net_input)[0]
+        got_output.append(previous_output)
+        difference = target_output - previous_output
 
         # Caliculate error
         if(is_bh_only):
             if( s < step // 2):
                 error += 0
             else:
-                error += abs(target_output - output) * 2
+                error += abs(target_output - previous_output) * 2
 
         else:
-            error += abs(target_output - output)
+            error += abs(target_output - previous_output)
 
         # Feedback phase
-        net_input = [0.0, 1.0, output, difference]
-        net.activate(net_input)
+        net_input = [0.0, 1.0, previous_output, difference]
+        previous_output = net.activate(net_input)[0]
 
     error /= step
 
