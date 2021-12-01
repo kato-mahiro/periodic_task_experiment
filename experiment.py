@@ -22,7 +22,7 @@ def create_parser():
     parser.add_argument('--is_increase', type=str, help="rule of dynamics. if True, cycle is increased. ", default = "False", required = False)
     parser.add_argument('--savedir', type=str, help="dir name to save the results.", default = "outputs", required=False)
     parser.add_argument('--config', type=str, help="name of config file.", required = True)
-    parser.add_argument('--model', type=str, help="name of using model. FeedForwardNetwork, ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
+    parser.add_argument('--model', type=str, help="name of using model. RecurrentNetwork,  FeedForwardNetwork, ExFeedForwardNetwork, ModFeedForwardNetwork, ExModFeedForwardNetwork ", required = True)
     parser.add_argument('--task', type=str, help="name of using task. binary_task or sinwave_task. ", default = "binary_task", required = False)
     parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
     parser.add_argument('--run_id', type=str, help="ID of the experiment.", default = '0', required = False)
@@ -67,7 +67,9 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    if(model == 'FeedForwardNetwork'):
+    if(model == 'RecurrentNetwork'):
+        model_genome = modneat.DefaultGenome
+    elif(model == 'FeedForwardNetwork'):
         model_genome = modneat.DefaultGenome
     elif(model == 'ExFeedForwardNetwork'):
         model_genome = modneat.ExGenome
