@@ -15,6 +15,17 @@ cp ./experiment_scripts/run_all.sh $savedir
 seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
     --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only True \
+    --savedir $savedir/random > /dev/null &&
+    echo "random-neat 終了" | ./rocket &
+
+seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 0 \
+    --task binary_task \
     --model ExFeedForwardNetwork \
     --config ./config/exgenome_config.ini \
     --run_id RUN_NO \
@@ -44,6 +55,18 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --is_bh_only True \
     --savedir $savedir/random > /dev/null &&
     echo "random-3 終了" | ./rocket &
+
+seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 0 \
+    --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only False \
+    --savedir $savedir/random > /dev/null &&
+    echo "random-neat 終了" | ./rocket &
+
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
@@ -84,6 +107,17 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 15 \
     --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only True \
+    --savedir $savedir/static > /dev/null &&
+    echo "fixed-neat 終了" | ./rocket &
+    
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 15 \
+    --task binary_task \
     --model ExFeedForwardNetwork \
     --config ./config/exgenome_config.ini \
     --run_id RUN_NO \
@@ -113,6 +147,17 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --is_bh_only True \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-3 終了" | ./rocket &
+
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 15 \
+    --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only False \
+    --savedir $savedir/static > /dev/null &&
+    echo "fixed-neat 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 15 \
@@ -154,6 +199,17 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 11 12 13 14 15 16 17 18 19 20 \
     --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only True \
+    --savedir $savedir/10_cycles > /dev/null &&
+    echo "10通り-neat 終了" | ./rocket &
+
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 10 11 12 13 14 15 16 17 18 19 20 \
+    --task binary_task \
     --model ExFeedForwardNetwork \
     --config ./config/exgenome_config.ini \
     --run_id RUN_NO \
@@ -183,6 +239,17 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --is_bh_only True \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-3 終了" | ./rocket &
+
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 10 11 12 13 14 15 16 17 18 19 20 \
+    --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only False \
+    --savedir $savedir/10_cycles > /dev/null &&
+    echo "10通り-neat 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 11 12 13 14 15 16 17 18 19 20 \
@@ -224,6 +291,18 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 \
     --is_increase True \
     --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only True \
+    --savedir $savedir/increasing > /dev/null &&
+    echo "increasing-neat 終了" | ./rocket &
+
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 10 \
+    --is_increase True \
+    --task binary_task \
     --model ExFeedForwardNetwork \
     --config ./config/exgenome_config.ini \
     --run_id RUN_NO \
@@ -255,6 +334,18 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --is_bh_only True \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-3 終了" | ./rocket &
+
+seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
+    --cycle 10 \
+    --is_increase True \
+    --task binary_task \
+    --model FeedForwardNetwork \
+    --config ./config/genome_config.ini \
+    --run_id RUN_NO \
+    --generation 2000 \
+    --is_bh_only False \
+    --savedir $savedir/increasing > /dev/null &&
+    echo "increasing-neat 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 10 \
