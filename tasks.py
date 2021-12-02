@@ -3,7 +3,7 @@ import math
 import matplotlib.pyplot as plt
 from numpy import save
 
-def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, show_graph = False, savepath = None, is_bh_only = True) -> float:
+def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, show_graph = False, savepath = None, is_bh_only = True, is_use_previous = True) -> float:
 
     error = 0.0
     expected = []
@@ -49,7 +49,11 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
         expected.append(target_output)
 
         # Get output phase
-        net_input = [1.0, 0.0, previous_output, 0.0]
+        if(is_use_previous):
+            net_input = [1.0, 0.0, previous_output, 0.0]
+        else:
+            net_input = [1.0, 0.0, 0.0, 0.0]
+
         previous_output = net.activate(net_input)[0]
         got_output.append(previous_output)
         difference = target_output - previous_output
@@ -65,7 +69,11 @@ def binary_task(net, step:int, cycle:int, is_increase=False, draw_graph=False, s
             error += abs(target_output - previous_output)
 
         # Feedback phase
-        net_input = [0.0, 1.0, previous_output, difference]
+        if(is_use_previous):
+            net_input = [0.0, 1.0, previous_output, difference]
+        else:
+            net_input = [0.0, 1.0, 0.0, difference]
+
         previous_output = net.activate(net_input)[0]
 
     error /= step
@@ -106,7 +114,7 @@ class net_dummy:
 if __name__=='__main__':
     n = net_dummy()
 
-    fitness = binary_task(n, 150, 10, is_increase=False, draw_graph=True, show_graph=True,savepath="./hoge")
+    fitness = binary_task(n, 150, 10, is_increase=False, draw_graph=True, show_graph=True,savepath="./hoge", is_use_previous= False)
     print(fitness)
 
     #fitness = sinwave_task(n, 100, 20, draw_graph=True, show_graph=True,savepath="./hoge")
