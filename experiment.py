@@ -165,8 +165,8 @@ if __name__ == '__main__':
         is_use_previous = False
 
     global out_dir
-    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_isIncrease_' + str(args.is_increase) + '_isBhOnly_' + str(args.is_bh_only) + '_isUsePre_' + str(args.is_use_previous) +   '_run_' +args.run_id)
-    print('out_dir is {}'.format(out_dir))
+    out_dir = os.path.join(os.getcwd(), args.savedir + '_' + args.model + '/' + args.task+ str(args.cycle) + '_isIncrease_' + str(args.is_increase) + '_isBhOnly_' + str(args.is_bh_only) + '_isUsePre_' + str(args.is_use_previous) +   '_run_' +args.run_id)
+    print('*** out_dir is {}'.format(out_dir))
 
 
     # Determine path to configuration file. This path manipulation is
