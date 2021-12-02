@@ -27,6 +27,7 @@ def create_parser():
     parser.add_argument('--generation', type=int, help="gneration length of the experiment.", default = 1000, required = False)
     parser.add_argument('--run_id', type=str, help="ID of the experiment.", default = '0', required = False)
     parser.add_argument('--is_bh_only', type=str, help="use only before half for fitness or, not", required = True)
+    parser.add_argument('--is_use_previous', type=str, help="models use previous output or not", required = True)
 
     args = parser.parse_args()
     return args
@@ -53,7 +54,7 @@ def eval_genomes(genomes, config):
             #net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
             net = eval('modneat.nn.' + model + '.create(genome,config)')
             #genome.fitness += tasks.binary_task(net, step=100, cycle=c)
-            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c, is_increase=is_increase, is_bh_only = is_bh_only)')
+            genome.fitness += eval('tasks.' + task_name + '(net, step = 150, cycle=c, is_increase=is_increase, is_bh_only = is_bh_only, is_use_previous = is_use_previous)')
         genome.fitness /= len(task_cycles)
 
 def run_experiment(config_file):
@@ -103,7 +104,7 @@ def run_experiment(config_file):
     for c in task_cycles:
         net = eval('modneat.nn.' + model + '.create(best_genome,config)')
         #best_fitness = tasks.binary_task(net, step=100, cycle=c, draw_graph = True, show_graph = True, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')
-        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, is_increase=is_increase, is_bh_only = is_bh_only, draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
+        best_fitness = eval( 'tasks.' + task_name + "(net, step=150, cycle=c, is_increase=is_increase, is_bh_only = is_bh_only, is_use_previous = is_use_previous,  draw_graph = True, show_graph = False, savepath= out_dir + '/cycle_' + str(c) + '_model_behaviour.png')")
         print('fitness of cycle {} : {}'.format(c, best_fitness))
 
         best_fitness_all_cycles += best_fitness
@@ -156,10 +157,15 @@ if __name__ == '__main__':
         is_bh_only = True
     elif(args.is_bh_only == 'False'):
         is_bh_only = False
-        
+
+    global is_use_previous
+    if(args.is_use_previous == 'True'):
+        is_use_previous = True
+    elif(args.is_use_previous == 'False'):
+        is_use_previous = False
 
     global out_dir
-    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_isIncrease_' + str(args.is_increase) + '_isBhOnly_' + str(args.is_bh_only) +   '_run_' +args.run_id)
+    out_dir = os.path.join(os.getcwd(), args.savedir,  args.model + '_' + args.task+ str(args.cycle) + '_isIncrease_' + str(args.is_increase) + '_isBhOnly_' + str(args.is_bh_only) + '_isUsePre_' + str(args.is_use_previous) +   '_run_' +args.run_id)
     print('out_dir is {}'.format(out_dir))
 
 
