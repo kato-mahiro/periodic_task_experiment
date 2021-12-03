@@ -9,17 +9,20 @@ echo "実験開始(全設定での一括実行) $savedir" | ./rocket
 
 cp ./experiment_scripts/run_all.sh $savedir
 
+IS_USE_PREVIOUS=False
+
 #
 # ランダムルール変更タスクの実験
 #
-seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
+seq 1  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
     --task binary_task \
     --model FeedForwardNetwork \
     --config ./config/genome_config.ini \
     --run_id RUN_NO \
-    --generation 2000 \
+    --generation 20 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-neat 終了" | ./rocket &
 
@@ -31,6 +34,7 @@ seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-1 終了" | ./rocket &
 
@@ -42,6 +46,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-2 終了" | ./rocket &
 
@@ -53,6 +58,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-3 終了" | ./rocket &
 
@@ -64,6 +70,7 @@ seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-neat 終了" | ./rocket &
 
@@ -76,6 +83,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-4 終了" | ./rocket &
 
@@ -87,6 +95,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-5 終了" | ./rocket &
 
@@ -98,6 +107,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
     echo "random-6 終了" | ./rocket &
 
@@ -112,6 +122,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-neat 終了" | ./rocket &
     
@@ -123,6 +134,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-1 終了" | ./rocket &
 
@@ -134,6 +146,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-2 終了" | ./rocket &
 
@@ -145,6 +158,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-3 終了" | ./rocket &
 
@@ -156,6 +170,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-neat 終了" | ./rocket &
 
@@ -167,6 +182,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-4 終了" | ./rocket &
 
@@ -178,6 +194,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-5 終了" | ./rocket &
 
@@ -189,6 +206,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/static > /dev/null &&
     echo "fixed-6 終了" | ./rocket &
 
@@ -204,6 +222,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-neat 終了" | ./rocket &
 
@@ -215,6 +234,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-1 終了" | ./rocket &
 
@@ -226,6 +246,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-2 終了" | ./rocket &
 
@@ -237,6 +258,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-3 終了" | ./rocket &
 
@@ -248,6 +270,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-neat 終了" | ./rocket &
 
@@ -259,6 +282,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-4 終了" | ./rocket &
 
@@ -270,6 +294,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-5 終了" | ./rocket &
 
@@ -281,6 +306,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-6 終了" | ./rocket &
 
@@ -296,6 +322,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-neat 終了" | ./rocket &
 
@@ -308,6 +335,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-1 終了" | ./rocket &
 
@@ -320,6 +348,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-2 終了" | ./rocket &
 
@@ -332,6 +361,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only True \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-3 終了" | ./rocket &
 
@@ -344,6 +374,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-neat 終了" | ./rocket &
 
@@ -356,6 +387,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-4 終了" | ./rocket &
 
@@ -368,6 +400,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-5 終了" | ./rocket &
 
@@ -380,5 +413,6 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --run_id RUN_NO \
     --generation 2000 \
     --is_bh_only False \
+    --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/increasing > /dev/null &&
     echo "increasing-6 終了" | ./rocket &
