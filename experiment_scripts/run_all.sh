@@ -14,13 +14,13 @@ IS_USE_PREVIOUS=False
 #
 # ランダムルール変更タスクの実験
 #
-seq 1  | xargs -I RUN_NO -P 10 python ./experiment.py \
+seq 10  | xargs -I RUN_NO -P 10 python ./experiment.py \
     --cycle 0 \
     --task binary_task \
     --model FeedForwardNetwork \
     --config ./config/genome_config.ini \
     --run_id RUN_NO \
-    --generation 20 \
+    --generation 2000 \
     --is_bh_only True \
     --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/random > /dev/null &&
