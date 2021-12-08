@@ -7,3 +7,4 @@ RUN apt install -y graphviz
 
 RUN pip3 install graphviz
 RUN pip3 install matplotlib
+RUN pip3 install gym

@@ -9,8 +9,9 @@ echo "実験開始(全設定での一括実行) $savedir" | ./rocket
 
 cp ./experiment_scripts/run_all.sh $savedir
 
-IS_USE_PREVIOUS=False
+IS_USE_PREVIOUS=True
 
+<<COMMENT
 #
 # ランダムルール変更タスクの実験
 #
@@ -309,12 +310,13 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     --is_use_previous $IS_USE_PREVIOUS \
     --savedir $savedir/10_cycles > /dev/null &&
     echo "10通り-6 終了" | ./rocket &
+COMMENT
 
 #
 # 増加(ダイナミクスが変動)タスクの設定
 #
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model FeedForwardNetwork \
@@ -327,7 +329,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-neat 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ExFeedForwardNetwork \
@@ -340,7 +342,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-1 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ModFeedForwardNetwork \
@@ -353,7 +355,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-2 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ExModFeedForwardNetwork \
@@ -366,7 +368,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-3 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model FeedForwardNetwork \
@@ -379,7 +381,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-neat 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ExFeedForwardNetwork \
@@ -392,7 +394,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-4 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ModFeedForwardNetwork \
@@ -405,7 +407,7 @@ seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
     echo "increasing-5 終了" | ./rocket &
 
 seq 1 10 | xargs -I RUN_NO -P 10 python ./experiment.py \
-    --cycle 10 \
+    --cycle 10 11 12 13 14 15 \
     --is_increase True \
     --task binary_task \
     --model ExModFeedForwardNetwork \
