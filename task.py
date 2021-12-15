@@ -1,7 +1,7 @@
 #from modneat import visualize
 import os
 import random
-#import modneat
+import modneat
 from scipy.spatial import distance
 
 class xor:
