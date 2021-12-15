@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+ln -fs ./utils/parse_options.sh ./parse_options.sh
+
 run_id=0
 network_type=FeedForwardNetwork
 genome_type=DefaultGenome
