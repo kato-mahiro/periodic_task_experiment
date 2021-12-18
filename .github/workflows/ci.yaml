@@ -25,7 +25,7 @@ jobs:
         run: pip install --upgrade pip
       - name: Install python dependencies
         run: pip install -r requirements.txt
-      - name: module ls test
-        run: cd ./modneat-python && ls
+      - name: clone submodule
+        run: git clone https://github.com/kato-mahiro/modneat-python
       - name: Install modneat
         run: cd ./modneat-python && pip install .
