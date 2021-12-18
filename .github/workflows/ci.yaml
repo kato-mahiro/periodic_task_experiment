@@ -1,0 +1,29 @@
+name: Action ci
+
+on:
+  push:
+    branches: 
+      - master
+  workflow_dispatch:
+
+jobs:
+  example-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          python-version: '3.8'
+          architecture: 'x64'
+      - name: Get Python version
+        run: python -V
+      - name: Install package dependencies
+        run: sudo apt update && sudo apt install -y graphviz
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+      - name: Install python dependencies
+        run: pip install -r requirements.txt
+      - name: Install modneat
+        run: cd ./modneat-python && pip install .
