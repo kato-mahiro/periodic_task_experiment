@@ -1,49 +1,40 @@
 #!/bin/bash
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 \
-    --task binary_task \
-    --model ExFeedForwardNetwork \
-    --config ./config/exgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir one_cycle_bin_task  > /dev/null &
+set -euo pipefail
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 \
-    --task binary_task \
-    --model ModFeedForwardNetwork \
-    --config ./config/modgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir one_cycle_bin_task  > /dev/null &
+network='FeedForwardNetwork'
+config_file='./configs/default_genome.ini'
+task='task.xor'
+job_no=1
+generation=10
+savedir='./results'
+logdir='./logs'
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 \
-    --task binary_task \
-    --model ExModFeedForwardNetwork \
-    --config ./config/exmodgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir one_cycle_bin_task  > /dev/null &
+help_message=$(cat << EOF
+Usage: $0 [options]
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 20 \
-    --task binary_task \
-    --model ExFeedForwardNetwork \
-    --config ./config/exgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir two_cycle_bin_task  > /dev/null &
+Options:
+    --network: 実験に用いるネットワークの種類を指定 (default=${network})
+    --config_file: モデル用の設定ファイルを指定 (default=${config_file})
+    --task: モデルに課すタスクを指定 (default=${task})
+    --job_no: 並列実行数を指定 (default=${task})
+    --generation: 実験を何世代行うかを指定 (default=${task})
+    --savedir: 実験結果を保存するディレクトリ (default=${savedir})
+EOF
+)
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 20\
-    --task binary_task \
-    --model ModFeedForwardNetwork \
-    --config ./config/modgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir two_cycle_bin_task  > /dev/null &
+. ../utils/parse_options.sh
+echo $network
+echo $config_file
 
-seq 1 10 | xargs -I RUN_NO -P 10 python experiment.py \
-    --cycle 10 20\
-    --task binary_task \
-    --model ExModFeedForwardNetwork \
-    --config ./config/exmodgenome_config.ini \
-    --run_id RUN_NO \
-    --savedir two_cycle_bin_task > /dev/null 
+savesubdir=$(echo "${task}_${network}"  | tr '.' '_')
+
+
+../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
+    python ./example.py \
+    --network $network \
+    --config $config_file \
+    --task $task \
+    --generation $generation \
+    --savedir $savedir/$savesubdir \
+    --run_id JOB_NO
