@@ -26,6 +26,6 @@ jobs:
       - name: Install python dependencies
         run: pip install -r requirements.txt
       - name: Setup submodule
-        run: git submodule init && ti sugmodule update
+        run: git submodule init && git sugmodule update
       - name: Install modneat
         run: cd ./modneat-python && pip install .
