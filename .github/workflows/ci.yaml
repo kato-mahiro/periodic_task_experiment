@@ -25,5 +25,7 @@ jobs:
         run: pip install --upgrade pip
       - name: Install python dependencies
         run: pip install -r requirements.txt
+      - name: module ls test
+        run: cd ./modneat-python && ls
       - name: Install modneat
         run: cd ./modneat-python && pip install .
