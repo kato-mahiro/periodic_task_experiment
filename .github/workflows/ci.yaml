@@ -29,3 +29,5 @@ jobs:
         run: git submodule init && git submodule update
       - name: Install modneat
         run: cd ./modneat-python && pip install .
+      - name: test run.sh
+        run: cd ./experiment/ && python example.py --config ../config/genome_config.ini
