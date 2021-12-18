@@ -1,4 +1,4 @@
-#from modneat import visualize
+from modneat import visualize
 import os
 import random
 import modneat
@@ -61,9 +61,9 @@ class xor:
 
         # Visualize the experiment results
         node_names = {-1:'A', -2: 'B', 0:'A XOR B'}
-        modneat.visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
-        modneat.visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
-        modneat.visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+        visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
 
 class non_static(xor):
     # The XOR inputs and expected corresponding outputs for fitness evaluation
@@ -124,9 +124,9 @@ class three_rules_random:
     def show_results(self, best_genome, config, stats, out_dir):
         # Visualize the experiment results
         node_names = {-1:'get_output_flag', -2: 'feedback_flag', -3: 'previous_error', 0:'output_1', 1:'output_2', 2:'output_3'}
-        modneat.visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
-        modneat.visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
-        modneat.visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+        visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
 
 class three_rules_cyclic(three_rules_random):
     def __init__(self, network_type):
