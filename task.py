@@ -1,7 +1,7 @@
-from modneat import visualize
 import os
 import random
 import modneat
+from modneat import visualize
 from scipy.spatial import distance
 
 class xor:
@@ -74,25 +74,32 @@ class non_static(xor):
 
 
 class three_rules_random:
-    def __init__(self, network_type):
+    def __init__(self, network_type, test = False):
         self.network_type = network_type
         self.current_rule = random.randint(0,2)
+        self.test = test
+        if(self.test):
+            print(self.__class__)
 
     def change_rule(self):
         while True:
             next_rule = random.randint(0,2)
             if(next_rule != self.current_rule):
+                if(self.test):
+                    print('Rule changed from %d to %d' % (self.current_rule, next_rule))
                 self.current_rule = next_rule
                 break
 
     def eval_fitness(self, net):
         step = 0
         current_rule_step = 0
-        rule_change_timing = random.randint(3,10)
+        rule_change_timing = random.randint(5,10)
         fitness = 0
 
         for step in range(100):
             step += 1
+            if(self.test):
+                print('*** step %d *** ' %step)
             current_rule_step += 1
 
             required_output = [0, 0, 0]
@@ -110,7 +117,7 @@ class three_rules_random:
 
             if(rule_change_timing == current_rule_step):
                 current_rule_step = 0
-                rule_change_timing = random.randint(3,10)
+                rule_change_timing = random.randint(5,10)
                 self.change_rule()
         
         return fitness / 100
@@ -129,13 +136,21 @@ class three_rules_random:
         visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
 
 class three_rules_cyclic(three_rules_random):
-    def __init__(self, network_type):
+    def __init__(self, network_type, test=False):
         self.network_type = network_type
         self.current_rule = 0
+        self.test = test
+        if(self.test):
+            print(self.__class__)
 
     def change_rule(self):
+        if(self.test):
+            print('*** Rule changed ***')
+            print(self.current_rule)
         self.current_rule += 1
         self.current_rule %= 3
+        if(self.test):
+            print(self.current_rule)
 
 class three_rules_static(three_rules_cyclic):
     def eval_fitness(self, net):
@@ -146,12 +161,12 @@ class three_rules_static(three_rules_cyclic):
 
         for step in range(100):
             step += 1
-            print('*** step:', step)
+            if(self.test):
+                print('*** step ***:', step)
             current_rule_step += 1
 
             required_output = [0, 0, 0]
             required_output[self.current_rule] = 1
-            print(required_output)
             output = net.activate([1, 0, 0])
             dist = distance.euclidean(output, required_output)
             assert(0 <= dist <= 1.73205081), ('required_output:', required_output, 'output:', output, 'dist:', dist)
