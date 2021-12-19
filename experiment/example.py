@@ -19,7 +19,7 @@ def create_parser():
     parser.add_argument('--config', type=str, help='', default='./configs/default_genome.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
-    parser.add_argument('--generation', type=int, help='', default=100)
+    parser.add_argument('--generation', type=int, help='', default=2000)
     parser.add_argument('--run_id', type=int, help='', default=0)
 
     args = parser.parse_args()

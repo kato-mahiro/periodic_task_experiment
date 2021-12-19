@@ -6,7 +6,7 @@ network='FeedForwardNetwork'
 config_file='./configs/default_genome.ini'
 task='task.xor'
 job_no=1
-generation=10
+generation=2000
 savedir='./results'
 logdir='./logs'
 
