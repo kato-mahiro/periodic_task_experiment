@@ -28,6 +28,14 @@ class Test_three_rules_static(unittest.TestCase):
         fitness = mytask.eval_fitness(mynet)
         assert(0.0 <= fitness <= 1.0)
 
+class Test_three_rules_vary_cyclic(unittest.TestCase):
+    def test_eval_fitness(self):
+        mytask = task.three_rules_vary_cyclic(network_type=dummy_net, test=True)
+        mynet = dummy_net()
+        print(mytask.network_type)
+        fitness = mytask.eval_fitness(mynet)
+        assert(0.0 <= fitness <= 1.0)
+
 class dummy_net:
     def activate(self, input):
         return [0,0,0]

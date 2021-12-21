@@ -152,6 +152,59 @@ class three_rules_cyclic(three_rules_random):
         if(self.test):
             print(self.current_rule)
 
+class three_rules_vary_cyclic(three_rules_random):
+    def __init__(self, network_type, test=False):
+        self.network_type = network_type
+        self.current_rule = 0
+        self.test = test
+        self.rule_list = [0, 1, 2]
+        random.shuffle(self.rule_list)
+        if(self.test):
+            print(self.__class__)
+
+    def change_rule(self):
+        if(self.test):
+            print('*** Rule changed ***')
+            print(self.current_rule)
+        self.current_rule += 1
+        self.current_rule %= 3
+        if(self.test):
+            print(self.current_rule)
+            
+    def eval_fitness(self, net):
+        step = 0
+        current_rule_step = 0
+        rule_change_timing = random.randint(5,10)
+        fitness = 0
+
+        for step in range(100):
+            step += 1
+            if(self.test):
+                print('*** step %d *** ' %step)
+            current_rule_step += 1
+
+            required_output = [0, 0, 0]
+            required_output[ self.rule_list[self.current_rule] ] = 1
+            output = net.activate([1, 0, 0])
+            if(self.test):
+                print('required_output is : ', required_output)
+            dist = distance.euclidean(output, required_output)
+            assert(0 <= dist <= 1.73205081), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            if(dist > 0.0):
+                error = dist / 1.7320508
+            else:
+                error = dist
+            fitness += (1.0 - error)
+
+            output = net.activate([0, 1, error])
+
+            if(rule_change_timing == current_rule_step):
+                current_rule_step = 0
+                rule_change_timing = random.randint(5,10)
+                self.change_rule()
+        
+        return fitness / 100
+
 class three_rules_static(three_rules_cyclic):
     def eval_fitness(self, net):
         step = 0
