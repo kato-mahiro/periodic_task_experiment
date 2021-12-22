@@ -41,3 +41,5 @@ jobs:
         run: cd ./experiment/ && bash run.sh --task task.three_rules_random --generation 10 --config_file ./configs/in3-out3/indexhebb_genome.ini --network IndExHebbFFN
       - name: test ModIndExHebbFFN
         run: cd ./experiment/ && bash run.sh --task task.three_rules_random --generation 10 --config_file ./configs/in3-out3/modindexhebb_genome.ini --network ModIndExHebbFFN
+      - name: test vary_cyclic task
+        run: cd ./experiment/ && bash run.sh --task task.three_rules_vary_cyclic --generation 10 --config_file ./configs/in3-out3/modindexhebb_genome.ini --network ModIndExHebbFFN
