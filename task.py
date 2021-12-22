@@ -4,6 +4,9 @@ import modneat
 from modneat import visualize
 from scipy.spatial import distance
 
+global max_vector_distance 
+max_vector_distance = 2.44949
+
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
     def __init__(self, network_type):
@@ -106,9 +109,9 @@ class three_rules_random:
             required_output[self.current_rule] = 1
             output = net.activate([1, 0, 0])
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            assert(0 <= dist <= max_vector_distance), ('required_output:', required_output, 'output:', output, 'dist:', dist)
             if(dist != 0.0):
-                error = dist / 2.0
+                error = dist / max_vector_distance 
             else:
                 error = dist
             fitness += (1.0 - error)
@@ -190,9 +193,9 @@ class three_rules_vary_cyclic(three_rules_random):
             if(self.test):
                 print('required_output is : ', required_output)
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            assert(0 <= dist <= max_vector_distance), ('required_output:', required_output, 'output:', output, 'dist:', dist)
             if(dist != 0.0):
-                error = dist / 2.0
+                error = dist / max_vector_distance
             else:
                 error = dist
             fitness += (1.0 - error)
@@ -223,9 +226,9 @@ class three_rules_static(three_rules_cyclic):
             required_output[self.current_rule] = 1
             output = net.activate([1, 0, 0])
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            assert(0 <= dist <= max_vector_distance), ('required_output:', required_output, 'output:', output, 'dist:', dist)
             if(dist != 0.0):
-                error = dist / 2.0
+                error = dist / max_vector_distance
             else:
                 error = dist
             fitness += (1.0 - error)
