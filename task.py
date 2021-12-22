@@ -106,9 +106,9 @@ class three_rules_random:
             required_output[self.current_rule] = 1
             output = net.activate([1, 0, 0])
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 1.73205081), ('required_output:', required_output, 'output:', output, 'dist:', dist)
-            if(dist > 0.0):
-                error = dist / 1.7320508
+            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            if(dist != 0.0):
+                error = dist / 2.0
             else:
                 error = dist
             fitness += (1.0 - error)
@@ -189,9 +189,9 @@ class three_rules_vary_cyclic(three_rules_random):
             if(self.test):
                 print('required_output is : ', required_output)
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 1.73205081), ('required_output:', required_output, 'output:', output, 'dist:', dist)
-            if(dist > 0.0):
-                error = dist / 1.7320508
+            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            if(dist != 0.0):
+                error = dist / 2.0
             else:
                 error = dist
             fitness += (1.0 - error)
@@ -222,9 +222,9 @@ class three_rules_static(three_rules_cyclic):
             required_output[self.current_rule] = 1
             output = net.activate([1, 0, 0])
             dist = distance.euclidean(output, required_output)
-            assert(0 <= dist <= 1.73205081), ('required_output:', required_output, 'output:', output, 'dist:', dist)
-            if(dist > 0.0):
-                error = dist / 1.7320508
+            assert(0 <= dist <= 2.0), ('required_output:', required_output, 'output:', output, 'dist:', dist)
+            if(dist != 0.0):
+                error = dist / 2.0
             else:
                 error = dist
             fitness += (1.0 - error)
