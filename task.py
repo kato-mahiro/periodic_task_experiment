@@ -157,8 +157,6 @@ class three_rules_vary_cyclic(three_rules_random):
         self.network_type = network_type
         self.current_rule = 0
         self.test = test
-        self.rule_list = [0, 1, 2]
-        random.shuffle(self.rule_list)
         if(self.test):
             print(self.__class__)
 
@@ -176,6 +174,9 @@ class three_rules_vary_cyclic(three_rules_random):
         current_rule_step = 0
         rule_change_timing = random.randint(5,10)
         fitness = 0
+
+        self.rule_list = [0, 1, 2]
+        random.shuffle(self.rule_list)
 
         for step in range(100):
             step += 1
