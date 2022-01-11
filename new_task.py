@@ -66,7 +66,45 @@ class timing_random:
             genome.fitness = self.eval_fitness(net)
     
     def show_results(self, best_genome, config, stats, out_dir):
-        pass
+        # Visualize the experiment results
+        node_names = {-1:'get_output_phase', -2: 'feedback_phase', -3: 'loss', 0:'output'}
+        visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+
+class timing_static(timing_random):
+    """
+    ルール更新ステップ数は毎回10ステップ毎
+    """
+    def __init__(self, network_type):
+        self.network_type = network_type
+        self.change_timings = [10] #空ならば毎回ランダムにルール変更ステップを決定。空でなければ、
+                                 #各試行の最初でリストの要素中からランダムにタイミングを決定
+        if(self.change_timings == []):
+            self.change_timing = None
+            self.current_change_timing = random.choice([5,6,7,8,9,10])
+        else:
+            self.change_timing = random.choice(self.change_timings)
+            self.current_change_timing = self.change_timing
+        self.desired_outputs = [0.0, 1.0] #change_timingが来ると一つ次の要素がdesired_outputになる。
+        self.desired_pointer = 0
+
+class timing_random_generation(timing_random):
+    """
+    ルール更新ステップ数は各試行でランダムに決定
+    """
+    def __init__(self, network_type):
+        self.network_type = network_type
+        self.change_timings = [5,6,7,8,9,10] #空ならば毎回ランダムにルール変更ステップを決定。空でなければ、
+                                 #各試行の最初でリストの要素中からランダムにタイミングを決定
+        if(self.change_timings == []):
+            self.change_timing = None
+            self.current_change_timing = random.choice([5,6,7,8,9,10])
+        else:
+            self.change_timing = random.choice(self.change_timings)
+            self.current_change_timing = self.change_timing
+        self.desired_outputs = [0.0, 1.0] #change_timingが来ると一つ次の要素がdesired_outputになる。
+        self.desired_pointer = 0
 
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
