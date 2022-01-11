@@ -8,7 +8,7 @@ import modneat
 # The helper used to visualize experiment results
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import task
+import new_task
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
