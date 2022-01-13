@@ -104,7 +104,7 @@ class changing_random:
     次のdesired_outputは毎回ランダムに決定(増加 or 減少)
     """
     def __init__(self, network_type):
-        self.neatwork_type = network_type
+        self.network_type = network_type
         self.desired_outputs = [0.0, 0.333, 0.666, 1.0]
         self.desired_output_pointer = 0
 
@@ -136,6 +136,11 @@ class changing_random:
             self.desired_output_pointer = len(self.desired_outputs) -1
         elif(self.desired_output_pointer >= len(self.desired_outputs)):
             self.desired_output_pointer = 0
+
+    def eval_genomes(self, genomes, config):
+        for genome_id, genome in genomes:
+            net = self.network_type.create(genome, config)
+            genome.fitness = self.eval_fitness(net)
 
     def show_results(self, best_genome, config, stats, out_dir):
         # Visualize the experiment results
