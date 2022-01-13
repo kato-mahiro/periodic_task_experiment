@@ -42,10 +42,7 @@ class timing_random:
                 self.change_timing = self.change_timings[try_no]
                 self.current_change_timing = self.change_timing
 
-            try:
-                net.reset()
-            except:
-                pass
+            net.reset()
 
             step = 0
             current_rule_step = 0
@@ -101,6 +98,101 @@ class timing_random_generation(timing_random):
                                  #各試行の最初でリストの要素中からランダムにタイミングを決定
         self.desired_outputs = [0.0, 1.0] #change_timingが来ると一つ次の要素がdesired_outputになる。
         self.desired_pointer = 0
+
+class changing_random:
+    """
+    次のdesired_outputは毎回ランダムに決定(増加 or 減少)
+    """
+    def __init__(self, network_type):
+        self.neatwork_type = network_type
+        self.desired_outputs = [0.0, 0.333, 0.666, 1.0]
+        self.desired_output_pointer = 0
+
+    def eval_fitness(self, net):
+        fitness = 0.0
+        step = 0
+        while(step < MAX_STEP):
+            step += 1
+
+            print(f'step: {step}')
+
+            output = net.activate([1, 0, 0])
+            desired_output = self.desired_outputs[self.desired_output_pointer]
+            print(f'desired_output: {desired_output}')
+            loss = abs(output[0] - desired_output)
+            fitness += (1.0 - loss)
+
+            output = net.activate([0, 1, loss])
+            
+            if(step %10 == 0):
+                self.update_desire_pointer(random.choice([-1, 1]))
+
+        return fitness / MAX_STEP
+    
+    def update_desire_pointer(self, shift):
+        print('***ルール変更しました***')
+        self.desired_output_pointer += shift
+        if(self.desired_output_pointer < 0):
+            self.desired_output_pointer = len(self.desired_outputs) -1
+        elif(self.desired_output_pointer >= len(self.desired_outputs)):
+            self.desired_output_pointer = 0
+
+    def show_results(self, best_genome, config, stats, out_dir):
+        # Visualize the experiment results
+        node_names = {-1:'get_output_phase', -2: 'feedback_phase', -3: 'loss', 0:'output'}
+        visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+
+class changing_static(changing_random):
+
+    def eval_fitness(self, net):
+        fitness = 0.0
+        step = 0
+        while(step < MAX_STEP):
+            step += 1
+            print(f'step: {step}')
+            output = net.activate([1, 0, 0])
+            desired_output = self.desired_outputs[self.desired_output_pointer]
+            print(f'desired_output: {desired_output}')
+            loss = abs(output[0] - desired_output)
+            fitness += (1.0 - loss)
+
+            output = net.activate([0, 1, loss])
+            
+            if(step %10 == 0):
+                self.update_desire_pointer(1)
+
+        return fitness / MAX_STEP
+
+class changing_random_generation(changing_random):
+
+    def eval_fitness(self, net):
+        fitness = 0.0
+        patterns = [-1, 1]
+        print('実験開始')
+
+        for p in patterns:
+            print(f'パターン:{p}')
+            net.reset()
+            self.desired_output_pointer = 0
+            step = 0
+            while(step < MAX_STEP):
+                step += 1
+                print(f'step is {step}')
+
+                output = net.activate([1, 0, 0])
+                desired_output = self.desired_outputs[self.desired_output_pointer]
+                print(f'desired_output: {desired_output}')
+                loss = abs(output[0] - desired_output)
+                fitness += (1.0 - loss)
+
+                output = net.activate([0, 1, loss])
+                
+                if(step %10 == 0):
+                    self.update_desire_pointer(p)
+
+        return fitness / (MAX_STEP * 2)
 
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
@@ -171,11 +263,14 @@ class non_static(xor):
         self.xor_outputs = [   (1.0,),     (0.66,),     (0.33,),     (0.0,)]
 
 class dummy_net:
-    def activate(self):
+    def activate(self, input_list):
         return [random.random()]
 
+    def reset(self):
+        pass
+
 if __name__=='__main__':
-    t = timing_random(network_type=dummy_net)
-    n = dummy_net
+    t = changing_random_generation(network_type=dummy_net)
+    n = dummy_net()
     fitness = t.eval_fitness(n)
     print(fitness)
