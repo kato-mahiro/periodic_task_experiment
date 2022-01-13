@@ -18,12 +18,6 @@ class timing_random:
         self.network_type = network_type
         self.change_timings = [] #空ならば毎回ランダムにルール変更ステップを決定。空でなければ、
                                  #各試行の最初でリストの要素中からランダムにタイミングを決定
-        if(self.change_timings == []):
-            self.change_timing = None
-            self.current_change_timing = random.choice([5,6,7,8,9,10])
-        else:
-            self.change_timing = random.choice(self.change_timings)
-            self.current_change_timing = self.change_timing
         self.desired_outputs = [0.0, 1.0] #change_timingが来ると一つ次の要素がdesired_outputになる。
         self.desired_pointer = 0
 
@@ -37,6 +31,13 @@ class timing_random:
         print(self.current_change_timing)
 
     def eval_fitness(self, net):
+        if(self.change_timings == []):
+            self.change_timing = None
+            self.current_change_timing = random.choice([5,6,7,8,9,10])
+        else:
+            self.change_timing = random.choice(self.change_timings)
+            self.current_change_timing = self.change_timing
+
         step = 0
         current_rule_step = 0
         fitness = 0.0
@@ -96,14 +97,38 @@ class timing_random_generation(timing_random):
         self.network_type = network_type
         self.change_timings = [5,6,7,8,9,10] #空ならば毎回ランダムにルール変更ステップを決定。空でなければ、
                                  #各試行の最初でリストの要素中からランダムにタイミングを決定
-        if(self.change_timings == []):
-            self.change_timing = None
-            self.current_change_timing = random.choice([5,6,7,8,9,10])
-        else:
-            self.change_timing = random.choice(self.change_timings)
-            self.current_change_timing = self.change_timing
         self.desired_outputs = [0.0, 1.0] #change_timingが来ると一つ次の要素がdesired_outputになる。
         self.desired_pointer = 0
+
+    def eval_fitness(self, net):
+
+        fitness = 0.0
+
+        for timing in self.change_timings:
+            print('実験開始')
+            net.reset()
+            step = 0 #ここ確認
+            current_rule_step = 0
+            self.change_timing = timing
+            self.current_change_timing = self.change_timing
+
+            while(step < MAX_STEP):
+                step += 1
+                current_rule_step += 1
+                print(f'*** step {step} ***')
+                output = net.activate([1, 0, 0])
+                desired_output = self.desired_outputs[self.desired_pointer % len(self.desired_outputs) ]
+                print(f'desired: {desired_output}')
+                loss = abs(output[0] - desired_output)
+                fitness += (1.0 - loss)
+
+                output = net.activate([0, 1, loss])
+
+                if(current_rule_step % self.current_change_timing == 0):
+                    self.update_desired_output()
+                    current_rule_step = 0
+
+        return fitness / (MAX_STEP * len(self.change_timings))
 
 class changing_random:
     """
@@ -281,7 +306,7 @@ class dummy_net:
         pass
 
 if __name__=='__main__':
-    t = changing_random_generation(network_type=dummy_net)
+    t = timing_random_generation(network_type=dummy_net)
     n = dummy_net()
     fitness = t.eval_fitness(n)
     print(fitness)
