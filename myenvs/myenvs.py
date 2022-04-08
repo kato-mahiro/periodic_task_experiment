@@ -34,7 +34,7 @@ class StaticCyclicEnv0(gym.Env):
         self.done = False
         self.info = {
                         'bonus_cnt':0, \
-                        'bonus_max': self.cycle_cnt_max * self.action_num -1, \
+                        'bonus_max': self.cycle_cnt_max * self.action_num, #生涯中でボーナスが発生するタイミングの数 
                         'is_bonus': True #ルールが切り替わった直後および最初のステップでTrue
                     }
         return self.observe()
