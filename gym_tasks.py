@@ -42,7 +42,7 @@ class static_cyclic_task:
                 break
         
         fitness = 0.0
-        fitness += normal_fitness / (self.action_num * self.cycle * self.cycle_cnt_max)
+        fitness += normal_fitness / (self.cycle * self.cycle_cnt_max * 2)
         fitness += bonus_fitness / (self.E.info['bonus_max'] * 2)
         return fitness, history
 
