@@ -12,7 +12,7 @@ class static_cyclic_task:
         self.action_num = 2
     
     def eval_fitness(self, net):
-        self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cytle_cnt_max = self.cycle_cnt_max, action_num = self.action_num)
+        self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cycle_cnt_max = self.cycle_cnt_max, action_num = self.action_num)
         normal_fitness = 0.0
         bonus_fitness = 0.0
         history = [] #各サイクル毎の正解数、ボーナスタイミングで正解できたが分かるような履歴
@@ -42,7 +42,7 @@ class static_cyclic_task:
                 break
         
         fitness = 0.0
-        fitness += normal_fitness / (self.action_num * self.cycle_num * self.cycle_cnt_max)
+        fitness += normal_fitness / (self.action_num * self.cycle * self.cycle_cnt_max)
         fitness += bonus_fitness / (self.E.info['bonus_max'] * 2)
         return fitness, history
 
