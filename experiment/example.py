@@ -9,6 +9,7 @@ import modneat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import new_task
+import gym_tasks
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
