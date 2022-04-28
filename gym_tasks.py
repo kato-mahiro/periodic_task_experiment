@@ -15,7 +15,7 @@ class static_cyclic_task:
         self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cycle_cnt_max = self.cycle_cnt_max, action_num = self.action_num)
         normal_fitness = 0.0
         bonus_fitness = 0.0
-        history = [] #各サイクル毎の正解数、ボーナスタイミングで正解できたが分かるような履歴
+        history = {'fb1_hist':[], 'fb2_hist':[], 'success_hist':[], 'bonus_hist':[], 'fitness_hist':[]}
         net.reset()
         observation = self.E.reset()
         while(True):
@@ -23,27 +23,45 @@ class static_cyclic_task:
             input_vector = [1.0, observation, 0.0, 0.0] #bias_input, observation, normal_feedbak, bonus_feedback
             action = numpy.argmax(net.activate(input_vector))
             observation, reward, done, info = self.E.step(action)
+
+            if(done == True):
+                break
+
             if(reward == 1.0):
                 normal_fitness += 1.0
                 feedback1 = 1.0
-                if(info['is_bonus']):
+                if(info['is_bonus']): 
+                    #ボーナス時に成功
                     bonus_fitness += 1.0
                     feedback2 = 1.0
-                else:
+                else: 
+                    #ボーナス時に失敗
                     feedback2 = 0.0
             else:
                 feedback1 = 0.0
                 feedback2 = 0.0
 
+            history['fb1_hist'].append(feedback1)
+            history['fb2_hist'].append(feedback2)
+
             #feedback phase
             net.activate([1.0, 0.0, feedback1, feedback2])
-
-            if(done == True):
-                break
         
         fitness = 0.0
         fitness += normal_fitness / (self.cycle * self.cycle_cnt_max * 2)
         fitness += bonus_fitness / (self.E.info['bonus_max'] * 2)
+
+        #history の作成(各サイクルでの正解数・ボーナスタイミングでの正解数が分かるように)
+        for idx in range(0, self.cycle_cnt_max * self.cycle, self.cycle):
+            history['success_hist'].append(sum(history['fb1_hist'][idx:idx+self.cycle]))
+            history['bonus_hist'].append(sum(history['fb2_hist'][idx:idx+self.cycle]))
+        #各サイクルで得たfitnessが分かるように
+        for idx in range(self.cycle_cnt_max):
+            history['fitness_hist'].append(0.0)
+            history['fitness_hist'][-1] += history['success_hist'][idx] / (self.cycle * self.cycle_cnt_max * 2)
+            history['fitness_hist'][-1] += history['bonus_hist'][idx] / (self.E.info['bonus_max'] * 2)
+
+
         return fitness, history
 
     def eval_genomes(self, genomes, config):
