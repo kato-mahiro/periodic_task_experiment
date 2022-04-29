@@ -10,7 +10,7 @@ import random
 """
 
 class StaticCyclicEnv0(gym.Env):
-    def __init__(self, cycle, cycle_cnt_max, action_num):
+    def __init__(self, cycle, cycle_cnt_max, action_num, noise):
         super().__init__()
         self.cycle = cycle
         assert self.cycle % action_num == 0 and self.cycle >= action_num, 'cycleはアクション数の整数倍でなくてはならない'
@@ -18,6 +18,7 @@ class StaticCyclicEnv0(gym.Env):
         self.action_num = action_num
         self.desired_action = -1
         self.cycle_cnt_max = cycle_cnt_max
+        self.noise = noise
         self.action_space = gym.spaces.Discrete(self.action_num)
         self.observation_space = gym.spaces.Box(
             low = 1,
@@ -44,7 +45,8 @@ class StaticCyclicEnv0(gym.Env):
 
         ### Step更新
         if(self.step_cnt % (self.cycle // self.action_num) == 0):
-            self.update_action()
+            if(random.random()) >= self.noise:
+                self.update_action()
             self.info['is_bonus'] = True
         else:
             self.info['is_bonus'] = False

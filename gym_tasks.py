@@ -10,9 +10,10 @@ class static_cyclic_task:
         self.cycle = 10
         self.cycle_cnt_max = 10
         self.action_num = 2
+        self.noise = 0.01 #ここに指定した値の割合で、ルール変更が発生しない
     
     def eval_fitness(self, net):
-        self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cycle_cnt_max = self.cycle_cnt_max, action_num = self.action_num)
+        self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cycle_cnt_max = self.cycle_cnt_max, action_num = self.action_num, noise=self.noise)
         normal_fitness = 0.0
         bonus_fitness = 0.0
         history = {'fb1_hist':[], 'fb2_hist':[], 'success_hist':[], 'bonus_hist':[], 'fitness_hist':[]}
