@@ -4,7 +4,7 @@ import myenvs.myenvs as myenvs
 import gym
 import os
 
-class static_cyclic_task:
+class single_cyclic_task:
     def __init__(self, network_type, cycle = 9, cycle_cnt_max = 10, action_num = 3, noise = 0.01):
         self.network_type = network_type
         self.cycle = cycle
@@ -89,7 +89,7 @@ class multi_cyclic_task:
     def eval_fitnes(self, net):
         fitness_list, history_list = [], [] #各サブタスクで得たfitness, historyのリスト
         for cycle in self.cycles:
-            subtask = static_cyclic_task(network_type = self.network_type, cycle = cycle)
+            subtask = single_cyclic_task(network_type = self.network_type, cycle = cycle)
             fitness, history = subtask.eval_fitness(net)
             fitness_list.append(fitness)
             history_list.append(history)
@@ -118,4 +118,4 @@ class random_cyclic_task:
         pass
 
 if __name__=='__main__':
-    t = static_cyclic_task(0)
+    t = single_cyclic_task(0)
