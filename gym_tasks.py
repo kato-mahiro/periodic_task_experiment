@@ -84,10 +84,19 @@ class static_cyclic_task:
 class multi_cyclic_task:
     def __init__(self, network_type):
         self.network_type = network_type
+        self.cycles = [9, 12, 15, 18]
     
     def eval_fitnes(self, net):
-        fitness, history = None, None
-        return fitness, history #何らかのfitness, history を返す
+        fitness_list, history_list = [], [] #各サブタスクで得たfitness, historyのリスト
+        for cycle in self.cycles:
+            subtask = static_cyclic_task(network_type = self.network_type, cycle = cycle)
+            fitness, history = subtask.eval_fitness(net)
+            fitness_list.append(fitness)
+            history_list.append(history)
+
+        fitness = sum(fitness_list) / len(fitness_list)
+
+        return fitness, history_list
     
     def eval_genomes(self, genomes, config):
         for genome_id, genome in genomes:
@@ -103,9 +112,6 @@ class multi_cyclic_task:
         visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
         visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
         visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
-
-
-    
 
 class random_cyclic_task:
     def __init__(self,network_type):
