@@ -5,7 +5,7 @@ import gym
 import os
 
 class static_cyclic_task:
-    def __init__(self, network_type, cycle = 10, cycle_cnt_max = 10, action_num = 2, noise = 0.00):
+    def __init__(self, network_type, cycle = 9, cycle_cnt_max = 10, action_num = 3, noise = 0.01):
         self.network_type = network_type
         self.cycle = cycle
         self.cycle_cnt_max = cycle_cnt_max
@@ -18,6 +18,7 @@ class static_cyclic_task:
         bonus_fitness = 0.0
         history = {'fb1_hist':[], 'fb2_hist':[], 'success_hist':[], 'bonus_hist':[], 'fitness_hist':[]}
         net.reset()
+        assert len(net.output_nodes) == self.action_num, 'Error, モデルのoutput_node数とタスクのaction_numが一致しません。'
         observation = self.E.reset()
         while(True):
             #get output phase
@@ -71,7 +72,11 @@ class static_cyclic_task:
     
     def show_results(self, best_genome, config, stats, out_dir):
         # Visualize the experiment results
-        node_names = {-1:'Bias input', -2: 'observation', -3: 'normal_feedback', -4:'bonus_feedback', 0:'output1', 1:'output2'}
+        node_names = {-1:'Bias input', -2: 'observation', -3: 'normal_feedback', -4:'bonus_feedback'}
+        net = self.network_type.create(best_genome, config)
+        for idx in range(len(net.output_nodes)):
+            node_names[idx] = 'output' + str(idx)
+
         visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
         visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
         visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
