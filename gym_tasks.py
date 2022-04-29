@@ -5,12 +5,12 @@ import gym
 import os
 
 class static_cyclic_task:
-    def __init__(self, network_type):
+    def __init__(self, network_type, cycle = 10, cycle_cnt_max = 10, action_num = 2, noise = 0.00):
         self.network_type = network_type
-        self.cycle = 10
-        self.cycle_cnt_max = 10
-        self.action_num = 2
-        self.noise = 0.01 #ここに指定した値の割合で、ルール変更が発生しない
+        self.cycle = cycle
+        self.cycle_cnt_max = cycle_cnt_max
+        self.action_num = action_num
+        self.noise = noise #ここに指定した値の割合で、ルール変更が発生しない
     
     def eval_fitness(self, net):
         self.E = gym.make('static_cyclic_env-v0', cycle = self.cycle, cycle_cnt_max = self.cycle_cnt_max, action_num = self.action_num, noise=self.noise)
@@ -62,7 +62,6 @@ class static_cyclic_task:
             history['fitness_hist'][-1] += history['success_hist'][idx] / (self.cycle * self.cycle_cnt_max * 2)
             history['fitness_hist'][-1] += history['bonus_hist'][idx] / (self.E.info['bonus_max'] * 2)
 
-
         return fitness, history
 
     def eval_genomes(self, genomes, config):
@@ -77,7 +76,7 @@ class static_cyclic_task:
         visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
         visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
 
-class dynamic_cyclic_task:
+class multi_cyclic_task:
     def __init__(self, network_type):
         pass
 
