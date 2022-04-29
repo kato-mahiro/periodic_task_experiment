@@ -78,7 +78,26 @@ class static_cyclic_task:
 
 class multi_cyclic_task:
     def __init__(self, network_type):
-        pass
+        self.network_type = network_type
+    
+    def eval_fitnes(self, net):
+        fitness, history = None, None
+        return fitness, history #何らかのfitness, history を返す
+    
+    def eval_genomes(self, genomes, config):
+        for genome_id, genome in genomes:
+            net = self.network_type.create(genome, config)
+            genome.fitness, genome.history = self.eval_fitnes(net)
+    
+    def show_results(self, best_genome, config, stats, out_dir):
+        # Visualize the experiment results
+        node_names = {-1:'Bias input', -2: 'observation', -3: 'normal_feedback', -4:'bonus_feedback', 0:'output1', 1:'output2'}
+        visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+
+
+    
 
 class random_cyclic_task:
     def __init__(self,network_type):
