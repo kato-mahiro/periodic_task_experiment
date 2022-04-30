@@ -5,7 +5,7 @@ import gym
 import os
 
 class single_cyclic_task:
-    def __init__(self, network_type, cycle = 20, cycle_cnt_max = 10, action_num = 2, noise = 0.0):
+    def __init__(self, network_type, cycle = 10, cycle_cnt_max = 10, action_num = 2, noise = 0.0):
         self.network_type = network_type
         self.cycle = cycle
         self.cycle_cnt_max = cycle_cnt_max
@@ -84,7 +84,7 @@ class single_cyclic_task:
 class multi_cyclic_task:
     def __init__(self, network_type):
         self.network_type = network_type
-        self.cycles = [20, 22, 24, 26, 28, 30]
+        self.cycles = [10, 12, 14, 16, 18, 20]
     
     def eval_fitnes(self, net):
         fitness_list, history_list = [], [] #各サブタスクで得たfitness, historyのリスト
